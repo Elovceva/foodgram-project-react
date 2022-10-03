@@ -14,8 +14,5 @@ class Command(BaseCommand):
         with open('data/ingredients.json', 'rb') as f:
             data = json.load(f)
             for i in data:
-                ingredient = Ingredient()
-                ingredient.name = i['name']
-                ingredient.measurement_unit = i['measurement_unit']
-                ingredient.save()
-                print(i['name'], i['measurement_unit'])
+                obj, created = Ingredient.objects.get_or_create(name=i['name'], measurement_unit=i['measurement_unit'])
+                print(obj, created)

@@ -40,10 +40,21 @@ class GetObjectMixin:
     permission_classes = (AllowAny,)
 
     def get_object(self):
+        """Возвращает рецепт"""
+
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         self.check_object_permissions(self.request, recipe)
         return recipe
+
+
+class CreateRetrieveViewSet(
+        GetObjectMixin,
+        generics.RetrieveDestroyAPIView,
+        generics.ListCreateAPIView):
+    """для удаления/добавления"""
+
+    pass
 
 
 class PermissionAndPaginationMixin:
@@ -61,6 +72,8 @@ class AddAndDeleteSubscribe(
     serializer_class = SubscribeSerializer
 
     def get_queryset(self):
+        """Получение списка подписок"""
+
         return self.request.user.follower.select_related(
             'following'
         ).prefetch_related(
@@ -70,12 +83,16 @@ class AddAndDeleteSubscribe(
             is_subscribed=Value(True), )
 
     def get_object(self):
+        """Получение подписки"""
+
         user_id = self.kwargs['user_id']
         user = get_object_or_404(User, id=user_id)
         self.check_object_permissions(self.request, user)
         return user
 
     def create(self, request, *args, **kwargs):
+        """Создание подписки"""
+
         instance = self.get_object()
         if request.user.id == instance.id:
             return Response(
@@ -90,38 +107,44 @@ class AddAndDeleteSubscribe(
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_destroy(self, instance):
+        """Удаление подписки"""
+
         self.request.user.follower.filter(author=instance).delete()
 
 
 class AddDeleteFavoriteRecipe(
-        GetObjectMixin,
-        generics.RetrieveDestroyAPIView,
-        generics.ListCreateAPIView):
+        CreateRetrieveViewSet):
     """Добавление и удаление рецепта в/из избранных."""
 
     def create(self, request, *args, **kwargs):
+        """Добавление рецепта в избранное"""
+
         instance = self.get_object()
         request.user.favorite_recipe.recipe.add(instance)
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_destroy(self, instance):
+        """Удаление рецепта из избранных"""
+
         self.request.user.favorite_recipe.recipe.remove(instance)
 
 
 class AddDeleteShoppingCart(
-        GetObjectMixin,
-        generics.RetrieveDestroyAPIView,
-        generics.ListCreateAPIView):
+         CreateRetrieveViewSet):
     """Добавление и удаление рецепта в/из корзины."""
 
     def create(self, request, *args, **kwargs):
+        """Добавление рецепта в корзину."""
+
         instance = self.get_object()
         request.user.shopping_cart.recipe.add(instance)
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_destroy(self, instance):
+        """Удаление рецепта из корзины."""
+
         self.request.user.shopping_cart.recipe.remove(instance)
 
 
@@ -132,6 +155,8 @@ class AuthToken(ObtainAuthToken):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
+        """Авторизация пользователя."""
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -158,11 +183,15 @@ class UsersViewSet(UserViewSet):
             is_subscribed=Value(False))
 
     def get_serializer_class(self):
+        """Возвращает класс, который будет использован для сериализатора"""
+
         if self.request.method.lower() == 'post':
             return UserCreateSerializer
         return UserListSerializer
 
     def perform_create(self, serializer):
+        """Сохраняем пароль"""
+
         password = make_password(self.request.data['password'])
         serializer.save(password=password)
 
@@ -189,6 +218,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_serializer_class(self):
+        """Возвращает класс, который будет использован для сериализатора"""
+
         if self.request.method in SAFE_METHODS:
             return RecipeReadSerializer
         return RecipeWriteSerializer
@@ -213,6 +244,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
             'shopping_cart', 'favorite_recipe')
 
     def perform_create(self, serializer):
+        """Сохранение пользователя как автора рецепта"""
+
         serializer.save(author=self.request.user)
 
     @action(
@@ -261,7 +294,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
 
 class TagsViewSet(
-        PermissionAndPaginationMixin,
         viewsets.ModelViewSet):
     """Список тэгов."""
 

@@ -63,8 +63,6 @@ class Recipe(models.Model):
         null=True)
     text = models.TextField(
         'Описание рецепта')
-    cooking_time = models.BigIntegerField(
-        'Время приготовления рецепта')
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient')
@@ -86,7 +84,7 @@ class Recipe(models.Model):
         ordering = ('-pub_date', )
 
     def __str__(self):
-        return f'{self.author.email}, {self.name}'
+        return self.name
 
 
 class RecipeIngredient(models.Model):
@@ -168,6 +166,8 @@ class FavoriteRecipe(models.Model):
             sender, instance, created, **kwargs):
         if created:
             return FavoriteRecipe.objects.create(user=instance)
+        else:
+            return "Error"
 
 
 class ShoppingCart(models.Model):

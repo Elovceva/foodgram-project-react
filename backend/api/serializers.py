@@ -185,7 +185,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'Ингредиент должен быть уникальным!')
             ingredient_list.append(ingredient)
-        tags = data['tags']
+        tags = data.get('tags', default=None)
         if not tags:
             raise serializers.ValidationError(
                 'Нужен хотя бы один тэг для рецепта!')
