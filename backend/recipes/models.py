@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model
+from django.core import validators
 from django.db import models
 from django.db.models.signals import post_save
-from django.core import validators
 from django.dispatch import receiver
 
 User = get_user_model()
 
 
 class Ingredient(models.Model):
-    """Модель ингридиента"""
+    """Модель ингридиентов"""
 
     name = models.CharField(
         'Название ингредиента',
@@ -27,7 +27,7 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
-    """Модель тега"""
+    """Модель тэгов"""
 
     name = models.CharField(
         'Имя',
@@ -94,7 +94,7 @@ class Recipe(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    """Модель количества ингридиентов в отдельных рецептах"""
+    """Модель связи ингридиента и количества"""
 
     recipe = models.ForeignKey(
         Recipe,
@@ -122,7 +122,7 @@ class RecipeIngredient(models.Model):
 
 
 class Subscribe(models.Model):
-    """Модель списка подписок"""
+    """Модель подписки"""
 
     user = models.ForeignKey(
         User,
@@ -152,7 +152,7 @@ class Subscribe(models.Model):
 
 
 class FavoriteRecipe(models.Model):
-    """Модель избранного"""
+    """Модель избранного рецепта"""
 
     user = models.OneToOneField(
         User,
