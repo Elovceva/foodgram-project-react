@@ -21,7 +21,6 @@ class RecipeAdmin(admin.ModelAdmin):
         'name', 'cooking_time',
         'author__email', 'ingredients__name')
     list_filter = ('pub_date', 'tags',)
-    inlines = (RecipeIngredientAdmin,)
     empty_value_display = EMPTY_MSG
 
     @admin.display(

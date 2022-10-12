@@ -28,7 +28,6 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     """Модель тэгов"""
-
     name = models.CharField(
         'Имя',
         max_length=60,
@@ -51,6 +50,30 @@ class Tag(models.Model):
         return self.name
 
 
+class RecipeIngredient(models.Model):
+    """Модель связи ингридиента и количества"""
+
+    ingredient = models.ForeignKey(
+        'Ingredient',
+        on_delete=models.CASCADE,
+        related_name='ingredient')
+    amount = models.PositiveSmallIntegerField(
+        default=1,
+        validators=(
+            validators.MinValueValidator(
+                1, message='Мин. количество ингридиентов 1'),),
+        verbose_name='Количество',)
+
+    class Meta:
+        verbose_name = 'Количество ингредиента'
+        verbose_name_plural = 'Количество ингредиентов'
+        ordering = ['-id']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['ingredient'],
+                name='unique ingredient')]
+
+
 class Recipe(models.Model):
     """Модель рецепта"""
 
@@ -70,8 +93,8 @@ class Recipe(models.Model):
     text = models.TextField(
         'Описание рецепта')
     ingredients = models.ManyToManyField(
-        Ingredient,
-        through='RecipeIngredient')
+        RecipeIngredient,
+        related_name='recipe')
     tags = models.ManyToManyField(
         Tag,
         verbose_name='Тэги',
@@ -91,34 +114,6 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class RecipeIngredient(models.Model):
-    """Модель связи ингридиента и количества"""
-
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='recipe')
-    ingredient = models.ForeignKey(
-        'Ingredient',
-        on_delete=models.CASCADE,
-        related_name='ingredient')
-    amount = models.PositiveSmallIntegerField(
-        default=1,
-        validators=(
-            validators.MinValueValidator(
-                1, message='Мин. количество ингридиентов 1'),),
-        verbose_name='Количество',)
-
-    class Meta:
-        verbose_name = 'Количество ингредиента'
-        verbose_name_plural = 'Количество ингредиентов'
-        ordering = ['-id']
-        constraints = [
-            models.UniqueConstraint(
-                fields=['recipe', 'ingredient'],
-                name='unique ingredient')]
 
 
 class Subscribe(models.Model):
