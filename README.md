@@ -27,7 +27,7 @@ python -m venv venv
 ```
 
 #### команда для Linux
-
+. venv/bin/activate
 ```
 source venv/bin/activate
 ```
