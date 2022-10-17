@@ -22,6 +22,7 @@ from .serializers import (IngredientSerializer, RecipeReadSerializer,
 
 class IngredientViewSet(ReadOnlyModelViewSet):
     """Вьюсет для модели ингридиента"""
+
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -31,6 +32,7 @@ class IngredientViewSet(ReadOnlyModelViewSet):
 
 class TagViewSet(ReadOnlyModelViewSet):
     """Вьюсет для модели тега"""
+
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -38,6 +40,7 @@ class TagViewSet(ReadOnlyModelViewSet):
 
 class RecipeViewSet(ModelViewSet):
     """Вьюсет для модели рецепта"""
+
     queryset = Recipe.objects.all()
     permission_classes = (IsAdminAuthorOrReadOnly,)
     pagination_class = CustomPagination
