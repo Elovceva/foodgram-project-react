@@ -21,7 +21,6 @@ services:
       - db
     env_file:
       - ./.env
-
   frontend:
     image: helen2022/foodgram-frontend:v1
     volumes:
