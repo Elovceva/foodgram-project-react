@@ -83,7 +83,6 @@ POST /api/users
 
 POST /api/auth/token/login/ - получение токена 
 ```
-
 в body
 {
 "password": "string",
