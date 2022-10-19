@@ -12,7 +12,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from recipes.models import (Favourite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingCart, Tag)
-from .filters import IngredientFilter, RecipeFilter
+from .filters import IngredientFilter, RecipeFilter, TagsFilter
 from .pagination import CustomPagination
 from .permissions import IsAdminOrReadOnly, IsAdminAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
