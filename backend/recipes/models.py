@@ -45,33 +45,6 @@ class Tag(models.Model):
         return self.name
 
 
-class IngredientInRecipe(models.Model):
-    """Модель количества ингридиентов в отдельных рецептах"""
-
-    ingredient = models.ForeignKey(
-        Ingredient,
-        on_delete=models.CASCADE,
-        verbose_name='Ингредиент',
-    )
-    amount = models.PositiveSmallIntegerField(
-        'Количество',
-        validators=[
-            MinValueValidator(1, message='Минимальное количество 1!'),
-            MaxValueValidator(10000, message='Максимальное значение 10000!')
-        ]
-    )
-
-    class Meta:
-        verbose_name = 'Ингредиент в рецепте'
-        verbose_name_plural = 'Ингредиенты в рецептах'
-
-    def __str__(self):
-        return (
-            f'{self.ingredient.name} ({self.ingredient.measurement_unit})'
-            f' - {self.amount} '
-        )
-
-
 class Recipe(models.Model):
     """Модель рецепта"""
     name = models.CharField('Название', max_length=200)
@@ -95,7 +68,8 @@ class Recipe(models.Model):
         ]
     )
     ingredients = models.ManyToManyField(
-        IngredientInRecipe,
+        Ingredient,
+        through='IngredientInRecipe',
         related_name='recipes',
         verbose_name='Ингредиенты'
     )
@@ -112,6 +86,38 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class IngredientInRecipe(models.Model):
+    """Модель количества ингридиентов в отдельных рецептах"""
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='ingredient_list',
+        verbose_name='Рецепт',
+    )
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE,
+        verbose_name='Ингредиент',
+    )
+    amount = models.PositiveSmallIntegerField(
+        'Количество',
+        validators=[
+            MinValueValidator(1, message='Минимальное количество 1!'),
+            MaxValueValidator(10000, message='Максимальное значение 10000!')
+        ]
+    )
+
+    class Meta:
+        verbose_name = 'Ингредиент в рецепте'
+        verbose_name_plural = 'Ингредиенты в рецептах'
+
+    def __str__(self):
+        return (
+            f'{self.ingredient.name} ({self.ingredient.measurement_unit})'
+            f' - {self.amount} '
+        )
 
 
 class Favourite(models.Model):

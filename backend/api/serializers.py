@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.models import F
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -132,8 +133,10 @@ class RecipeReadSerializer(ModelSerializer):
         """метод получения ингредиентов"""
         recipe = obj
         ingredients = recipe.ingredients.values(
-            'ingredient_id',
-            'amount'
+            'id',
+            'name',
+            'measurement_unit',
+            amount=F('ingredientinrecipe__amount')
         )
         return ingredients
 
