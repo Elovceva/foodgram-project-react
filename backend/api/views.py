@@ -22,7 +22,6 @@ from .serializers import (IngredientSerializer, RecipeReadSerializer,
 
 class IngredientViewSet(ReadOnlyModelViewSet):
     """Вьюсет для модели ингридиента"""
-
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -32,7 +31,6 @@ class IngredientViewSet(ReadOnlyModelViewSet):
 
 class TagViewSet(ReadOnlyModelViewSet):
     """Вьюсет для модели тега"""
-
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -40,7 +38,6 @@ class TagViewSet(ReadOnlyModelViewSet):
 
 class RecipeViewSet(ModelViewSet):
     """Вьюсет для модели рецепта"""
-
     queryset = Recipe.objects.all()
     permission_classes = (IsAdminAuthorOrReadOnly,)
     pagination_class = CustomPagination
@@ -48,11 +45,9 @@ class RecipeViewSet(ModelViewSet):
     filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
-        """метод создания рецепта"""
         serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
-        """метод сериализатора"""
         if self.request.method in SAFE_METHODS:
             return RecipeReadSerializer
         return RecipeWriteSerializer
