@@ -45,9 +45,11 @@ class RecipeViewSet(ModelViewSet):
     filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
+        """метод создания рецепта"""
         serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
+        """метод сериализатора"""
         if self.request.method in SAFE_METHODS:
             return RecipeReadSerializer
         return RecipeWriteSerializer
