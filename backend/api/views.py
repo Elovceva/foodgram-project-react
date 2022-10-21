@@ -1,5 +1,7 @@
+import io
+
 from django.db.models import Sum
-from django.http import HttpResponse
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -11,6 +13,9 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from recipes.models import (Favourite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingCart, Tag)
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import CustomPagination
 from .permissions import IsAdminOrReadOnly, IsAdminAuthorOrReadOnly
@@ -111,12 +116,23 @@ class RecipeViewSet(ModelViewSet):
             'ingredient__name',
             'ingredient__measurement_unit'
         ).annotate(amount=Sum('amount'))
-        buy_list = []
-        for item in ingredients:
-            buy_list.append(f'{item["ingredient__name"]} - {item["amount"]} '
-                            f'{item["ingredient__measurement_unit"]} \n')
-
-        response = HttpResponse(buy_list, 'Content-Type: text/plain')
-        response['Content-Disposition'] = ('attachment; '
-                                           'filename="buylist.txt"')
-        return response
+        pdf = io.BytesIO()
+        gen_pdf = canvas.Canvas(pdf)
+        pdfmetrics.registerFont(TTFont('Calibri', 'Calibri.ttf'))
+        gen_pdf.setFont('Calibri', 20)
+        gen_pdf.drawString(200, 800, 'Список покупок:')
+        hight_position = 760
+        gen_pdf.setFont('Calibri', 14)
+        for ingredient in ingredients:
+            gen_pdf.drawString(
+                100,
+                hight_position,
+                f'{ingredient["ingredient__name"]} - '
+                f'{ingredient["amount"]} '
+                f'{ingredient["ingredient__measurement_unit"]}.'
+            )
+            hight_position -= 20
+        gen_pdf.showPage()
+        gen_pdf.save()
+        pdf.seek(0)
+        return FileResponse(pdf, as_attachment=True, filename='shop-list.pdf')
