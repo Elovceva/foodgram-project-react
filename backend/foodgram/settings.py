@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'my_mega_secret_code_ilz@4zqj=rq&agdol^##zgl9(vs'
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
