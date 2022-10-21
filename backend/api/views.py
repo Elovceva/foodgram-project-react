@@ -118,7 +118,7 @@ class RecipeViewSet(ModelViewSet):
         ).annotate(amount=Sum('amount'))
         pdf = io.BytesIO()
         gen_pdf = canvas.Canvas(pdf)
-        pdfmetrics.registerFont(TTFont('DejaVuSans', 'DejaVuSans.ttf'))
+        pdfmetrics.registerFont(TTFont('Calibri', 'api/fonts/Calibri.ttf'))
         gen_pdf.setFont('Calibri', 20)
         gen_pdf.drawString(200, 800, 'Список покупок:')
         hight_position = 760
