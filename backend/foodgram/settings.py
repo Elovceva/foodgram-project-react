@@ -139,3 +139,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
     '178.154.205.41'
 ]
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
