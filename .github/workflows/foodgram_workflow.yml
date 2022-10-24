@@ -75,9 +75,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            sudo docker pull helen2022/foodgram-backend:v1
+            sudo docker pull helen2022/foodgram-frontend:v1
             sudo docker compose stop
-            sudo docker compose rm backend-1
-            sudo docker compose rm frontend-1
+            sudo docker compose rm backend
+            sudo docker compose rm frontend
             rm -f .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
