@@ -4,7 +4,7 @@ from rest_framework import serializers
 from users.serializers import CustomUserSerializer
 
 from ..recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                     ShoppingCart, Tag)
+                              ShoppingCart, Tag)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
