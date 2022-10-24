@@ -3,7 +3,7 @@ from jsonschema import ValidationError
 from rest_framework import serializers
 from users.serializers import CustomUserSerializer
 
-from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+from ..recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                      ShoppingCart, Tag)
 
 
