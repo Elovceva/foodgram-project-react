@@ -4,12 +4,12 @@ from .models import (Favorite, Ingredient, Recipe, RecipeIngredient, RecipeTag,
                      ShoppingCart, Tag)
 
 
-class RecipeIngredientsInline(admin.TabularInline):
+@admin.register(RecipeIngredient)
+class RecipeIngredient(admin.ModelAdmin):
     """Параметры настроек админ зоны модели ингредиентов в рецепте.
     """
     model = RecipeIngredient
-    min_num = 1
-    extra = 1
+    list_display = ('recipe', 'ingredient', 'amount',)
 
 
 class RecipeTagsInline(admin.TabularInline):
@@ -25,7 +25,7 @@ class RecipeAdmin(admin.ModelAdmin):
     """Параметры админ зоны рецептов."""
     list_display = ('pk', 'name', 'author', 'favorite')
     list_filter = ('name', 'author', 'tags')
-    inlines = (RecipeIngredientsInline, RecipeTagsInline)
+    inlines = (RecipeTagsInline)
 
     def favorite(self, obj):
         return obj.favorite.all().count()
