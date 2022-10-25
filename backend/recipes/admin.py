@@ -25,7 +25,7 @@ class RecipeAdmin(admin.ModelAdmin):
     """Параметры админ зоны рецептов."""
     list_display = ('pk', 'name', 'author', 'favorite')
     list_filter = ('name', 'author', 'tags')
-    inlines = (RecipeTagsInline)
+    inlines = (RecipeTagsInline, )
 
     def favorite(self, obj):
         return obj.favorite.all().count()

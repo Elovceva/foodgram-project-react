@@ -3,8 +3,8 @@ from jsonschema import ValidationError
 from rest_framework import serializers
 from users.serializers import CustomUserSerializer
 
-from ..recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                              ShoppingCart, Tag)
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
 
 
 class IngredientSerializer(serializers.ModelSerializer):

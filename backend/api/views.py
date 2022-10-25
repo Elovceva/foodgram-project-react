@@ -7,9 +7,9 @@ from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
-from ..api.filters import IngredientsFilter, RecipeFilter
-from ..recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                              ShoppingCart, Tag)
+from .filters import IngredientsFilter, RecipeFilter
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
 from .permissions import IsAuthorOrAdmin
 from .serializers import (AddRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, ShowRecipeFullSerializer,
