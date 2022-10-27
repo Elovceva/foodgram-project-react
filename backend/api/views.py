@@ -10,6 +10,7 @@ from rest_framework.permissions import (IsAuthenticated,
 from rest_framework.response import Response
 
 from .filters import IngredientsFilter, RecipeFilter
+from .paginator import CustomPageNumberPaginator
 from .permissions import IsAuthorOrAdmin
 from .serializers import (AddRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, ShowRecipeFullSerializer,
@@ -24,6 +25,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_class = RecipeFilter
     serializer_class = ShowRecipeFullSerializer
     permission_classes = (IsAuthorOrAdmin,)
+    pagination_class = CustomPageNumberPaginator
 
     def get_serializer_class(self):
         """Метод выбора сериализатора в зависимости от запроса."""
