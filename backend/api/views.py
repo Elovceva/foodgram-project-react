@@ -8,9 +8,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
-from .paginator import CustomPageNumberPaginator
 
 from .filters import IngredientsFilter, RecipeFilter
+from .paginator import CustomPageNumberPaginator
 from .permissions import IsAuthorOrAdmin
 from .serializers import (AddRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, ShowRecipeFullSerializer,
