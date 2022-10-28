@@ -9,7 +9,7 @@ services:
       - ./.env
 
   backend:
-    image: helen2022/foodgram-backend:v1
+    image: helen2022/foodgram-backend:v6
     restart: always
     volumes:
       - static_backend_value:/app/static_backend/
@@ -20,7 +20,7 @@ services:
       - ./.env
 
   frontend:
-    image: helen2022/foodgram-frontend:v1
+    image: helen2022/foodgram-frontend:v6
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
