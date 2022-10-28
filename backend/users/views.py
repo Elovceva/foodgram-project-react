@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions, status
 from rest_framework.generics import get_object_or_404
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from api.paginator import CustomPageNumberPaginator
 from .models import Subscribe
 from .serializers import SubscribeViewSerializer
 
@@ -49,7 +48,7 @@ class ListSubscribeViewSet(generics.ListAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SubscribeViewSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPageNumberPaginator
 
     def get_queryset(self):
         user = self.request.user

@@ -9,7 +9,7 @@ services:
       - ./.env
 
   backend:
-    image: helen2022/foodgram-backend:v6
+    image: helen2022/foodgram-backend:v5
     restart: always
     volumes:
       - static_backend_value:/app/static_backend/
